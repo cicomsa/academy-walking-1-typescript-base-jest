@@ -1,8 +1,11 @@
-import {Example} from "../main/example";
+import { Game, Grid } from "../main/example";
 
-describe('example test', () => {
-    it("should give sum of a + b when adding a and b", () => {
-        let example: Example = new Example();
-        expect(example.add(1, 2)).toBe(3);
+describe('game of life', () => {
+    it("kills a cell that is underpopulated in the array", () => {
+        const grid = new Grid(['x', '', '', '', '', ''])
+        const game: Game = new Game(grid);
+        const nextGeneratedGrid: Grid = new Grid(['', '', '', '', '', ''])
+
+        expect(game.playNext()).toEqual(nextGeneratedGrid)
     })
 })
