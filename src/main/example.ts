@@ -1,12 +1,12 @@
 export class Grid {
-    private cells: string[];
+    private cells: string[][];
 
-    constructor(cells: string[]) {
+    constructor(cells: string[][]) {
         this.cells = cells
     }
 
     nextGeneration() {
-        const nextGenerationCells = this.cells.map(cell => '');
+        const nextGenerationCells = this.cells.map(row => row.map(() => ' '));
         return new Grid(nextGenerationCells);
     }
 }
