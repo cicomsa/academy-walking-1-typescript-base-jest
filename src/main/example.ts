@@ -4,6 +4,11 @@ export class Grid {
     constructor(cells: string[]) {
         this.cells = cells
     }
+
+    nextGeneration() {
+        const nextGenerationCells = this.cells.map(cell => '');
+        return new Grid(nextGenerationCells);
+    }
 }
 
 export class Game {
@@ -13,7 +18,7 @@ export class Game {
         this.grid = grid
     }
 
-    playNext() {
-        return new Grid(['', '', '', '', '', ''])
+    play() {
+        return this.grid.nextGeneration();
     }
 }
