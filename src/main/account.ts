@@ -21,7 +21,8 @@ export class Account implements AccountService {
 
     printStatement() {
         let transactionString = '';
-        for (let transaction of this.transactions) {
+        const reverseTransactions = [...this.transactions].reverse();
+        for (let transaction of reverseTransactions) {
             const formatedTransaction = transaction.formatTransaction()
             transactionString += `\n${formatedTransaction}`;
         }
@@ -33,15 +34,13 @@ export class Account implements AccountService {
         const depositDate = new Date().toLocaleDateString();
         const newBalance = this.currentBalance + amount;
         this.currentBalance = newBalance;
-        this.transactions = [new Transaction(depositDate, amount, newBalance), ...this.transactions];
-        //this.transactions.unshift(new Transaction(depositDate, amount, newBalance));
-        //this.transactions.push(new Transaction(depositDate, amount, newBalance));
+        this.transactions.push(new Transaction(depositDate, amount, newBalance));
     }
 
     withdraw(amount: number) {
         const withdrawDate = new Date().toLocaleDateString();
         const newBalance = this.currentBalance - amount;
         this.currentBalance = newBalance;
-        this.transactions = [new Transaction(withdrawDate, -amount, newBalance), ...this.transactions];
+        this.transactions.push(new Transaction(withdrawDate, -amount, newBalance));
     }
 }

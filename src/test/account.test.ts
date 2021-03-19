@@ -62,6 +62,18 @@ describe('Account', () => {
                 '10/01/2012 || 1      || 1');
         })
 
+        it('should maintian the transactions when print is called twice', () => {
+            MockDate.set('01/10/2012');
+            account.deposit(1);
+            account.printStatement();
+            MockDate.set('01/11/2012');
+            account.deposit(1);
+            account.printStatement();
+            expect(mockPrinter.printStatement).lastCalledWith('Date       || Amount || Balance\n' +
+                '11/01/2012 || 1      || 2\n' +
+                '10/01/2012 || 1      || 1');
+        })
+
         it('should print two deposits that occur it chronological reverse order correctly', () => {
             MockDate.set('01/11/2012');
             account.deposit(1);
