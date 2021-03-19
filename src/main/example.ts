@@ -11,33 +11,28 @@ export class Grid {
     }
 
     countAliveNeighbours(x: number, y: number) {
-        let neighbours = []
+        this.combinations().forEach(combination => {
 
-        if (x - 1 >= 0 && (y - 1 >= 0))
-            neighbours.push(this.cells[x - 1][y - 1])
+        })
 
-        if (y - 1 >= 0)
-            neighbours.push(this.cells[x][y - 1])
+            const row = this.cells[x + i];
+            console.log(`i ${i} row ${row}`);
+            if (row) neighbors.push(row[y + j])
 
-        if (y - 1 >= 0 && x + 1 <= this.cells[0].length)
-            neighbours.push(this.cells[x + 1][y - 1])
+        return neighbors.filter(cell => cell === 'x').length
+    }
 
-        if (x - 1 >= 0)
-            neighbours.push(this.cells[x - 1][y])
-
-        if (x + 1 <= this.cells[0].length)
-            neighbours.push(this.cells[x + 1][y])
-
-        if (y + 1 <= this.cells[0].length && x - 1 >= 0)
-            neighbours.push(this.cells[x - 1][y + 1])
-
-        if (y + 1 <= this.cells[0].length)
-            neighbours.push(this.cells[x][y + 1])
-
-        if (x + 1 <= this.cells[0].length && y + 1 <= this.cells[0].length)
-            neighbours.push(this.cells[x + 1][y + 1])
-
-        return neighbours.filter(cell => cell === `x`).length
+    combinations() {
+        return [
+            [-1, -1],
+            [-1, 0],
+            [-1, 1],
+            [0, -1],
+            [0, 1],
+            [1, -1],
+            [1, 0],
+            [1, 1]
+        ]
     }
 }
 

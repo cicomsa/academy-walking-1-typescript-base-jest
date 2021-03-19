@@ -32,11 +32,17 @@ class Account implements AccountService {
 
     printStatement() {
         let transactionString = '';
-        this.transactions.forEach(transaction => {
-            transactionString += this.printer.formatTransaction(transaction);
-        });
 
-        this.printer.printStatement(`${this.header} + ${transactionString}`);
+        for(let transaction of this.transactions) {
+            console.log(transaction)
+            const formatedTransaction = transaction.toString()
+            // const formatedTransaction = `${transaction.date} || ${transaction.amount}   || ${transaction.balanceAfterTransaction}`
+            console.log(formatedTransaction)
+            transactionString += `\n${formatedTransaction}`;
+        }
+
+        console.log(transactionString)
+        this.printer.printStatement(`${this.header}${transactionString}`);
     }
 
     deposit(amount: number) {
@@ -57,7 +63,8 @@ class Printer {
     }
 
     formatTransaction(transaction: Transaction): string {
-        return `${transaction.date} || ${transaction.amount} || ${transaction.balanceAfterTransaction}`;
+        console.log('asda', transaction)
+        return `${transaction.date} || ${transaction.amount}   || ${transaction.balanceAfterTransaction}`;
     }
 }
 
@@ -100,5 +107,16 @@ describe('Account', () => {
                 '14/01/2012 || 1000   || 1000');
         })
 
+    })
+})
+
+describe('Printer', () => {
+    it('should format a transaction', () => {
+        const printer = new Printer()
+        expect(printer.formatTransaction({
+            amount: 1000,
+            date: '10/01/2012',
+            balanceAfterTransaction: 1000
+        })).toBe('10/01/2012 || 1000   || 1000');
     })
 })
