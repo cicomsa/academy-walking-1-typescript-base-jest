@@ -16,6 +16,10 @@ class Transaction {
         this.date = date;
         this.balanceAfterTransaction = balanceAfterTransaction;
     }
+
+    formatTransaction(): string {
+        return `${this.date} || ${this.amount}   || ${this.balanceAfterTransaction}`;
+    }
 }
 
 class Account implements AccountService {
@@ -32,16 +36,11 @@ class Account implements AccountService {
 
     printStatement() {
         let transactionString = '';
-
         for(let transaction of this.transactions) {
-            console.log(transaction)
-            const formatedTransaction = transaction.toString()
-            // const formatedTransaction = `${transaction.date} || ${transaction.amount}   || ${transaction.balanceAfterTransaction}`
-            console.log(formatedTransaction)
+            const formatedTransaction = transaction.formatTransaction()
             transactionString += `\n${formatedTransaction}`;
         }
 
-        console.log(transactionString)
         this.printer.printStatement(`${this.header}${transactionString}`);
     }
 
@@ -61,11 +60,6 @@ class Printer {
     printStatement(str: string) {
         console.log(str);
     }
-
-    formatTransaction(transaction: Transaction): string {
-        console.log('asda', transaction)
-        return `${transaction.date} || ${transaction.amount}   || ${transaction.balanceAfterTransaction}`;
-    }
 }
 
 describe('Account', () => {
@@ -73,8 +67,7 @@ describe('Account', () => {
     let account: Account;
     beforeEach(() => {
         mockPrinter = {
-            printStatement: jest.fn(),
-            formatTransaction: jest.fn()
+            printStatement: jest.fn()
         }
         account = new Account(mockPrinter);
     })
@@ -112,11 +105,7 @@ describe('Account', () => {
 
 describe('Printer', () => {
     it('should format a transaction', () => {
-        const printer = new Printer()
-        expect(printer.formatTransaction({
-            amount: 1000,
-            date: '10/01/2012',
-            balanceAfterTransaction: 1000
-        })).toBe('10/01/2012 || 1000   || 1000');
+        const transaction = new Transaction('10/01/2012', 1000, 1000);
+        expect(transaction.formatTransaction()).toBe('10/01/2012 || 1000   || 1000');
     })
 })
