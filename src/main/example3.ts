@@ -25,6 +25,10 @@ interface Transaction {
   type: TransactionType;
 }
 
+function getTransactionAmount(transaction: Transaction) {
+  return transaction.type == TransactionType.DEPOSIT ? transaction.amount : -transaction.amount;
+}
+
 export class Account {
   private printer: Printer;
   private transactions: Transaction[] = [];
@@ -51,18 +55,18 @@ export class Account {
 
   printStatement() {
     const header = "Date       || Amount || Balance";
-    const transaction = this.transactions.length
-      ? Account.transactionToStatementLine(this.transactions[0])
-      : "";
-    this.printer.printStatement(header + transaction);
+    let balance = 0;
+    const transactionStatementString = this.transactions.map((transaction) => {
+      const transactionAmount = getTransactionAmount(transaction);
+      balance += transactionAmount;
+      return Account.transactionToStatementLine(transaction, balance);
+    }).reverse().join('');
+    this.printer.printStatement(header + transactionStatementString);
   }
 
-  private static transactionToStatementLine(transaction: Transaction): string {
-    const amount =
-      transaction.type === TransactionType.DEPOSIT
-        ? transaction.amount
-        : transaction.amount * -1;
+  private static transactionToStatementLine(transaction: Transaction, balance: number): string {
+    const amount = getTransactionAmount(transaction);
 
-    return `\n${formatDate(transaction.date)} || ${amount} || ${amount}`;
+    return `\n${formatDate(transaction.date)} || ${amount} || ${balance}`;
   }
 }
