@@ -14,9 +14,15 @@ export interface Printer {
   printStatement: (value: string) => void;
 }
 
+enum TransactionType {
+  WITHDRAWAL,
+  DEPOSIT,
+}
+
 interface Transaction {
   date: Date;
   amount: number;
+  type: TransactionType;
 }
 
 export class Account {
@@ -31,20 +37,32 @@ export class Account {
     this.transactions.push({
       date: new Date(),
       amount,
+      type: TransactionType.DEPOSIT,
     });
   }
 
-  withdraw(number: number) {
-    throw new Error("not implemented");
+  withdraw(amount: number) {
+    this.transactions.push({
+      date: new Date(),
+      amount,
+      type: TransactionType.WITHDRAWAL,
+    });
   }
 
   printStatement() {
     const header = "Date       || Amount || Balance";
-    const transaction = this.transactions
-      ? `\n${formatDate(this.transactions[0].date)} || ${
-          this.transactions[0].amount
-        } || ${this.transactions[0].amount}`
+    const transaction = this.transactions.length
+      ? Account.transactionToStatementLine(this.transactions[0])
       : "";
     this.printer.printStatement(header + transaction);
+  }
+
+  private static transactionToStatementLine(transaction: Transaction): string {
+    const amount =
+      transaction.type === TransactionType.DEPOSIT
+        ? transaction.amount
+        : transaction.amount * -1;
+
+    return `\n${formatDate(transaction.date)} || ${amount} || ${amount}`;
   }
 }

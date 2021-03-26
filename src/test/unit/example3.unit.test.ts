@@ -17,7 +17,7 @@ describe("given a bank account", () => {
     });
   });
 
-  describe("when I may a single deposit", () => {
+  describe("when I may a single operation", () => {
     it("should print a statement with a single deposit", () => {
       const mockPrinter: Printer = {
         printStatement: jest.fn(),
@@ -45,6 +45,27 @@ describe("given a bank account", () => {
 
       expect(mockPrinter.printStatement).toHaveBeenCalledWith(
         "Date       || Amount || Balance\n" + "25/01/2012 || -1 || -1"
+      );
+    });
+  });
+
+  describe("when I have two deposits", () => {
+    it("should print a correct statement", () => {
+      const mockPrinter: Printer = {
+        printStatement: jest.fn(),
+      };
+
+      const account = new Account(mockPrinter);
+      MockDate.set("2012-01-25");
+      account.deposit(1);
+      MockDate.set("2012-01-26");
+      account.deposit(1);
+      account.printStatement();
+
+      expect(mockPrinter.printStatement).toHaveBeenCalledWith(
+        "Date       || Amount || Balance" +
+          "\n26/01/2012 || 1 || 2" +
+          "\n25/01/2012 || 1 || 1"
       );
     });
   });
