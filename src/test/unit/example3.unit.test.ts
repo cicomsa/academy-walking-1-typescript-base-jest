@@ -24,14 +24,28 @@ describe("given a bank account", () => {
       };
 
       const account = new Account(mockPrinter);
-      MockDate.set("01/10/2012");
+      MockDate.set("2012-01-25");
       account.deposit(1);
       account.printStatement();
 
       expect(mockPrinter.printStatement).toHaveBeenCalledWith(
-        "Date       || Amount || Balance\n" +
-        "10/01/2012 || 1 || 0"
+        "Date       || Amount || Balance\n" + "25/01/2012 || 1 || 1"
       );
-    })
-  })
+    });
+
+    it("should print a statement with a single withdrawal", () => {
+      const mockPrinter: Printer = {
+        printStatement: jest.fn(),
+      };
+
+      const account = new Account(mockPrinter);
+      MockDate.set("2012-01-25");
+      account.withdraw(1);
+      account.printStatement();
+
+      expect(mockPrinter.printStatement).toHaveBeenCalledWith(
+        "Date       || Amount || Balance\n" + "25/01/2012 || -1 || -1"
+      );
+    });
+  });
 });
