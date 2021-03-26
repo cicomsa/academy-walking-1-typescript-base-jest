@@ -18,6 +18,6 @@ export class Account {
   }
 
   printStatement() {
-    throw new Error("not implemented");
+    this.printer.printStatement("Date       || Amount || Balance");
   }
 }

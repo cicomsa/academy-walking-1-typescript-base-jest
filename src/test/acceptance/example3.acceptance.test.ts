@@ -18,7 +18,7 @@ describe("given a bank account", () => {
       account.withdraw(500);
       account.printStatement();
 
-      expect(mockPrinter.printStatement).toBe(
+      expect(mockPrinter.printStatement).toHaveBeenCalledWith(
         "Date       || Amount || Balance\n" +
           "14/01/2012 || -500   || 2500\n" +
           "13/01/2012 || 2000   || 3000\n" +
